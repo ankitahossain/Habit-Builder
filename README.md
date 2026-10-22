@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Habit Builder — Full-Stack Project
 
 A responsive habit tracker built around the supplied project flow: authentication, habit CRUD, daily checklist, current/longest streaks, calendar heatmap, reminders, weekly analytics, and deployment guidance.
@@ -67,3 +68,6 @@ Register a new account from the UI. The API stores users and habits in PostgreSQ
 4. Run tests and include actual test results.
 5. Test timezone boundaries, invalid inputs, missed days, and duplicate check-offs.
 6. Deploy using the options required by your module and include real URLs only after deployment.
+=======
+# Habit-Builder-Project
+>>>>>>> 1cd05e56bda11a0dae5d435da9977047f05a2fc6
