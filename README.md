@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Habit Builder — Full-Stack Project
 
 A responsive habit tracker built around the supplied project flow: authentication, habit CRUD, daily checklist, current/longest streaks, calendar heatmap, reminders, weekly analytics, and deployment guidance.
@@ -68,6 +67,14 @@ Register a new account from the UI. The API stores users and habits in PostgreSQ
 4. Run tests and include actual test results.
 5. Test timezone boundaries, invalid inputs, missed days, and duplicate check-offs.
 6. Deploy using the options required by your module and include real URLs only after deployment.
-=======
-# Habit-Builder-Project
->>>>>>> 1cd05e56bda11a0dae5d435da9977047f05a2fc6
+
+## Deploy on Vercel (two projects from one repo)
+
+**Server project** (Root Directory: `server`)
+Environment variables: `DATABASE_URL` (hosted Postgres, e.g. Neon/Supabase), `JWT_SECRET`, `CLIENT_ORIGIN` (exact client URL, no trailing slash), `NODE_ENV=production`.
+Run `server/db/schema.sql` once on the hosted database. Check `https://<server>.vercel.app/api/health`: it must show `"db":"connected"`.
+
+**Client project** (Root Directory: `client`)
+Environment variable: `VITE_API_URL=https://<server>.vercel.app/api`. Redeploy after setting it (Vite bakes it in at build time).
+
+Note: node-cron does not run on Vercel; reminders need an external scheduler (Vercel Cron) in production.

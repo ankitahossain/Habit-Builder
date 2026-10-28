@@ -12,8 +12,14 @@ import { calculateStreaks } from './streaks.js';
 import { startReminderScheduler } from './notifications.js';
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173' }));
+const allowedOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173').split(',').map(o => o.trim().replace(/\/+$/, '')).filter(Boolean);
+app.use(cors({
+  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
+}));
 app.use(express.json({ limit: '20kb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 30 }));
 const port = Number(process.env.PORT || 4000);
@@ -31,10 +37,16 @@ const habitSchema = z.object({
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional().default('#6D5CE8')
 });
 
-app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'Habit Builder API' }));
+app.get('/api/health', async (_req, res) => {
+  const config = { jwtSecret: !!process.env.JWT_SECRET, databaseUrl: !!process.env.DATABASE_URL, clientOrigin: !!process.env.CLIENT_ORIGIN };
+  try { await pool.query('SELECT 1 FROM users LIMIT 1'); res.json({ status: 'ok', service: 'Habit Builder API', db: 'connected', config }); }
+  catch (err) { res.status(500).json({ status: 'error', db: err.message, config }); }
+});
+app.get('/', (_req, res) => res.json({ service: 'Habit Builder API', health: '/api/health' }));
 
 app.post('/api/auth/register', async (req, res, next) => {
   try {
+    if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not set.');
     const input = registerSchema.parse(req.body);
     const email = input.email.toLowerCase();
     const hash = await bcrypt.hash(input.password, 12);
@@ -174,7 +186,8 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Something went wrong. Please try again.' });
 });
 
-if (process.env.NODE_ENV !== 'test') {
+// Vercel runs this file as a serverless function: no app.listen and no cron there.
+if (!process.env.VERCEL && process.env.NODE_ENV !== 'test') {
   if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is required.');
   startReminderScheduler();
   app.listen(port, () => console.log(`Habit Builder API running on http://localhost:${port}`));
