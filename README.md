@@ -1,4 +1,6 @@
 Project Link : http://localhost:5173/
+Output Demonstration Video : https://youtu.be/ma0JVse_kAQ
+
 # Habit Builder — Full-Stack Project
 
 A responsive habit tracker built around the supplied project flow: authentication, habit CRUD, daily checklist, current/longest streaks, calendar heatmap, reminders, weekly analytics, and deployment guidance.
