@@ -1,5 +1,4 @@
 
-🌐 **Live Demo:**  http://localhost:5173/
 🎥 **Demo Video:** [(https://youtu.be/ma0JVse_kAQ)](https://youtu.be/ma0JVse_kAQ)
 
 # Habit Builder — Full-Stack Project
