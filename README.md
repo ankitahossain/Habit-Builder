@@ -1,5 +1,6 @@
-Project Link : http://localhost:5173/
-Output Demonstration Video : https://youtu.be/ma0JVse_kAQ
+
+🌐 **Live Demo:**  http://localhost:5173/
+🎥 **Demo Video:** [(https://youtu.be/ma0JVse_kAQ)](https://youtu.be/ma0JVse_kAQ)
 
 # Habit Builder — Full-Stack Project
 
